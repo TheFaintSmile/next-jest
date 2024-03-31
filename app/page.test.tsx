@@ -1,10 +1,43 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Page from "./page";
 
-it("App Router: Works with Server Components", () => {
+it("renders a heading", () => {
   render(<Page />);
-  expect(screen.getByRole("heading")).toHaveTextContent("App Router");
-});
+
+  const heading = screen.getByRole("heading", {
+    name: /counter app/i,
+  });
+
+  expect(heading).toBeInTheDocument();
+})
+
+it("increments the counter", () => {
+  render(<Page />);
+
+  const incrementButton = screen.getByRole("button", {
+    name: /\+/i,
+  });
+  
+  fireEvent.click(incrementButton);
+
+  const counter = screen.getByText("1");
+
+  expect(counter).toBeInTheDocument();
+})
+
+it("decrements the counter", () => {
+  render(<Page />);
+
+  const decrementButton = screen.getByRole("button", {
+    name: /-/i,
+  });
+
+  fireEvent.click(decrementButton);
+
+  const counter = screen.getByText("-1");
+
+  expect(counter).toBeInTheDocument();
+})
